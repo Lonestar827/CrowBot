@@ -23,25 +23,23 @@ async def on_message(message):
         msg = 'Hello {0.author.mention}'.format(message)
         await client.send_message(message.channel, msg)
 
-    #If ya want to insult the bot
+    #!bitchass : If ya want to insult the bot
     if message.content.startswith(invoker + '!bitchass'):
         msg = 'WHAT DID YA SAY, SUCKA!? \n' + '<a:Gahn:395276099141238794><a:Frame:395276114064572426>'.format(message)
         await client.send_message(message.channel, msg)
 
-    #be treated to a dandy haiku or submit your own stanzas
+    #!haiku : be treated to a dandy haiku
     if message.content.startswith(invoker + '!haiku'):
-        #if command is blank: do default
-
-            #generate the stanzas
+        #generate the stanzas
             part1 = stanza1[randint(0,len(stanza1))]
             part2 = stanza2[randint(0,len(stanza2))]
             part3 = stanza3[randint(0,len(stanza3))]
 
-            #put together the messege
+        #put together the messege
             msg = "```" + part1 + "\n" + part2 + "\n" + part3 + "```".format(message)
             await client.send_message(message.channel, msg)
 
-    #submit a stanza for the bot
+    #!submit : submit a stanza for the bot
     if message.content.startswith(invoker + '!submit'):
 
         #see which stanza they want
@@ -82,9 +80,8 @@ async def on_message(message):
             await client.send_message(message.channel,
             "Thats not a valid entry, please try `!submitting` again")
                                 
-        
 
-    #logs_out
+    #!exit : logs_out
     if message.content.startswith(invoker + '!exit'):
         if message.author.id == '64917161432322048':
             msg = 'By your command...'.format(message)
