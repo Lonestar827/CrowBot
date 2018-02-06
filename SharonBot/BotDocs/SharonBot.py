@@ -97,7 +97,11 @@ async def on_message(message):
     if message.content.startswith(invoker + '!view'):
         await client.send_message(message.channel,
         "Placeholder")
-        
+
+    #!invite : invite this bot to other servers
+    if message.content.startswith(invoker + '!invite'):
+        await client.send_message(message.channel,
+        "https://discordapp.com/oauth2/authorize?client_id=410301890551873536&scope=bot")
 
     #!credits : shows where credit is due
     if message.content.startswith(invoker + '!credits'):
@@ -123,4 +127,4 @@ async def on_ready():
     print('------')
     
 
-client.run('MzQyNDI3NTMwMjk4NjU0NzIx.DVU4dw.HHls59SuDNb5ulgIeUMnG0Cmzt8')
+client.run('NDEwMzAxODkwNTUxODczNTM2.DVrK8g.jIqJWaHaZsN65H3tfQub6M4jjQA')
