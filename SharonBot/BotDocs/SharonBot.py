@@ -101,10 +101,7 @@ async def on_message(message):
                                  )
 
     #!view : views available stanzas
-    if message.content.startswith(invoker + '!view'):
-        await client.send_message(message.channel,
-        "Placeholder"
-                                 )
+    #placeholder text for test
 
     #!invite : invite this bot to other servers
     if message.content.startswith(invoker + '!invite'):
