@@ -44,7 +44,7 @@ async def on_message(message):
 
         #see which stanza they want
         await client.send_message(message.channel,
-        "Please tell me which stanza you're submitting (1, 2, 3)")
+        "Please tell me which stanza you're submitting (1, 2, 3), or any other input to abort submition")
 
         msg = await client.wait_for_message(author=message.author)
 
@@ -56,31 +56,55 @@ async def on_message(message):
 
             #get stanza
             await client.send_message(message.channel,
-            "Please tell me the content of the stanza")
+            "Please tell me the content of the stanza (Type `abort` to cancel stanza submition)")
 
+            #message variable for later
             msg = await client.wait_for_message(author=message.author)
-            
 
-            await client.send_message(message.channel, "Thanks for submitting your dandy stanza!")
+            #check for "abort"
+            if msg.content.startswith('abort'):
+                #end command
+                await client.send_message(message.channel,
+                "Aborting submition")
 
-            #write to file
-            if(number.content == '1'):
-                with open('FirstDandySubmitions.txt', 'a') as the_file:
-                            the_file.write(msg.content + '\n')
-            if(number.content == '2'):
-                with open('SecondDandySubmitions.txt', 'a') as the_file:
-                            the_file.write(msg.content + '\n')
-            if (number.content == '3'):
-                with open('ThirdDandySubmitions.txt', 'a') as the_file:
-                            the_file.write(msg.content + '\n')
+            else:
+                #thank the user for the stanza
+                await client.send_message(message.channel, "Thanks for submitting your dandy stanza!")
 
-            
+                #write to file
+                if(number.content == '1'):
+                    with open('FirstDandySubmitions.txt', 'a') as the_file:
+                                the_file.write(msg.content + '\n')
+                if(number.content == '2'):
+                    with open('SecondDandySubmitions.txt', 'a') as the_file:
+                                the_file.write(msg.content + '\n')
+                if (number.content == '3'):
+                    with open('ThirdDandySubmitions.txt', 'a') as the_file:
+                                the_file.write(msg.content + '\n')    
 
+        #not proper input
         else:
             await client.send_message(message.channel,
             "Thats not a valid entry, please try `!submitting` again")
                                 
 
+    #!help : Show help page
+    if message.content.startswith(invoker + '!help'):
+        await client.send_message(message.channel,
+        "Placeholder")
+
+    #!view : views available stanzas
+    if message.content.startswith(invoker + '!view'):
+        await client.send_message(message.channel,
+        "Placeholder")
+        
+
+    #!credits : shows where credit is due
+    if message.content.startswith(invoker + '!credits'):
+        await client.send_message(message.channel,
+        "Placeholder")
+
+    
     #!exit : logs_out
     if message.content.startswith(invoker + '!exit'):
         if message.author.id == '64917161432322048':
