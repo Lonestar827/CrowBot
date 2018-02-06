@@ -111,6 +111,11 @@ async def on_message(message):
         "```A bot designed for Haikus\nCommands available to everyone:\ndandyism!hello: H E L L O\ndandyism!toTheStars: be treated to a dandy haiku made from the txt files\ndandyism!submit: submit your own stanzas for review\ndandyism!help: shows the help page\ndandyism!credits: shows where credit is due\ncommands available to admins (Role Manegers)\ndandyism!view: allows you to look at the available stanzas and submissions\n```"
                                  )
 
+    #!save: saves the current instances of stanzas to the txt file
+    #if message.content.startswith(invoker + '!save'):
+    #check to see if the caller is the bot owner
+    #then overwrite the files with the current instants stanzas
+    
     #!view : views available stanzas
     #if message.content.startswith(invoker + '!view'):
         #check for user to be bot owner
