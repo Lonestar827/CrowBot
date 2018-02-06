@@ -5,7 +5,7 @@ import sys
 client = discord.Client()
 
 #current invokers for the bot
-invoker = 'To The Stars'
+invoker = 'dandyism'
 
 #stanzas based off of Slayers Instant Kill
 stanza1= [line.rstrip('\n') for line in open('FirstDandyStanzas.txt')]
