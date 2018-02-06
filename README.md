@@ -22,7 +22,10 @@ dandyism!help:
 dandyism!credits:
   shows where credit is due
   
-commands available to admins (Role Manegers)
+dandyism!invite:
+  invite this dandy bot to this server
+  
+commands available to the bot owner (Lonestar)
 
 dandyism!view:
   allows you to look at the available stanzas and submitions
