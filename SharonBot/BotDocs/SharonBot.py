@@ -5,7 +5,7 @@ import sys
 client = discord.Client()
 
 #current invokers for the bot
-invoker = 'dandyism'
+invoker = 'To The Stars'
 
 #stanzas based off of Slayers Instant Kill
 stanza1= [line.rstrip('\n') for line in open('FirstDandyStanzas.txt')]
@@ -44,7 +44,7 @@ async def on_message(message):
 
         #see which stanza they want
         await client.send_message(message.channel,
-        "Please tell me which stanza you're submitting (1, 2, 3), or any other input to abort submition")
+        "Please tell me which stanza you're submitting (1, 2, 3), or any other input to abort submission")
 
         msg = await client.wait_for_message(author=message.author)
 
@@ -56,7 +56,7 @@ async def on_message(message):
 
             #get stanza
             await client.send_message(message.channel,
-            "Please tell me the content of the stanza (Type `abort` to cancel stanza submition)")
+            "Please tell me the content of the stanza (Type `abort` to cancel stanza submission)")
 
             #message variable for later
             msg = await client.wait_for_message(author=message.author)
@@ -65,7 +65,7 @@ async def on_message(message):
             if msg.content.startswith('abort'):
                 #end command
                 await client.send_message(message.channel,
-                "Aborting submition")
+                "Aborting submission")
 
             else:
                 #thank the user for the stanza
@@ -91,7 +91,7 @@ async def on_message(message):
     #!help : Show help page
     if message.content.startswith(invoker + '!help'):
         await client.send_message(message.channel,
-        "```A bot designed for Haikus\nCommands available to everyone:\ndandyism!hello: H E L L O\ndandyism!haiku: be treated to a dandy haiku made from the txt files\ndandyism!submit: submit your own stanzas for review\ndandyism!help: shows the help page\ndandyism!credits: shows where credit is due\ncommands available to admins (Role Manegers)\ndandyism!view: allows you to look at the available stanzas and submitions\n```")
+        "```A bot designed for Haikus\nCommands available to everyone:\nTo The Stars!hello: H E L L O\nTo The Stars!haiku: be treated to a dandy haiku made from the txt files\nTo The Stars!submit: submit your own stanzas for review\nTo The Stars!help: shows the help page\nTo The Stars!credits: shows where credit is due\ncommands available to admins (Role Manegers)\nTo The Stars!view: allows you to look at the available stanzas and submissions\n```")
 
     #!view : views available stanzas
     if message.content.startswith(invoker + '!view'):
