@@ -45,7 +45,8 @@ async def on_message(message):
 
         #see which stanza they want
         await client.send_message(message.channel,
-        "Please tell me which stanza you're submitting (1, 2, 3), or any other input to abort submission")
+        "Please tell me which stanza you're submitting (1, 2, 3), or any other input to abort submission"
+                                 )
 
         msg = await client.wait_for_message(author=message.author)
 
@@ -57,7 +58,8 @@ async def on_message(message):
 
             #get stanza
             await client.send_message(message.channel,
-            "Please tell me the content of the stanza (Type `abort` to cancel stanza submission)")
+            "Please tell me the content of the stanza (Type `abort` to cancel stanza submission)"
+                                     )
 
             #message variable for later
             msg = await client.wait_for_message(author=message.author)
@@ -66,11 +68,14 @@ async def on_message(message):
             if msg.content.startswith('abort'):
                 #end command
                 await client.send_message(message.channel,
-                "Aborting submission")
+                 "Aborting submission"
+                                         )
 
             else:
                 #thank the user for the stanza
-                await client.send_message(message.channel, "Thanks for submitting your dandy stanza!")
+                await client.send_message(message.channel, 
+                                          "Thanks for submitting your dandy stanza!"
+                                         )
 
                 #write to file
                 if(number.content == '1'):
@@ -86,28 +91,33 @@ async def on_message(message):
         #not proper input
         else:
             await client.send_message(message.channel,
-            "Thats not a valid entry, please try `!submitting` again")
+            "Thats not a valid entry, please try `!submitting` again"
+                                     )
                                 
 
     #!help : Show help page
     if message.content.startswith(invoker + '!help'):
         await client.send_message(message.channel,
-        "```A bot designed for Haikus\nCommands available to everyone:\nTo The Stars!hello: H E L L O\nTo The Stars!haiku: be treated to a dandy haiku made from the txt files\nTo The Stars!submit: submit your own stanzas for review\nTo The Stars!help: shows the help page\nTo The Stars!credits: shows where credit is due\ncommands available to admins (Role Manegers)\nTo The Stars!view: allows you to look at the available stanzas and submissions\n```")
+        "```A bot designed for Haikus\nCommands available to everyone:\nTo The Stars!hello: H E L L O\nTo The Stars!haiku: be treated to a dandy haiku made from the txt files\nTo The Stars!submit: submit your own stanzas for review\nTo The Stars!help: shows the help page\nTo The Stars!credits: shows where credit is due\ncommands available to admins (Role Manegers)\nTo The Stars!view: allows you to look at the available stanzas and submissions\n```"
+                                 )
 
     #!view : views available stanzas
     if message.content.startswith(invoker + '!view'):
         await client.send_message(message.channel,
-        "Placeholder")
+        "Placeholder"
+                                 )
 
     #!invite : invite this bot to other servers
     if message.content.startswith(invoker + '!invite'):
         await client.send_message(message.channel,
-        "https://discordapp.com/oauth2/authorize?client_id=410301890551873536&scope=bot")
+        "https://discordapp.com/oauth2/authorize?client_id=410301890551873536&scope=bot"
+                                 )
 
     #!credits : shows where credit is due
     if message.content.startswith(invoker + '!credits'):
         await client.send_message(message.channel,
-        "```Credits:\nLonestar : creator and coder for the bot\nSangmillion: Provided the slayer soundfiles for transcription\nUbuyo: Helping with the transcription```")
+        "```Credits:\nLonestar : creator and coder for the bot\nSangmillion: Provided the slayer soundfiles for transcription\nUbuyo: Helping with the transcription```"
+                                 )
 
     
     #!exit : logs_out
