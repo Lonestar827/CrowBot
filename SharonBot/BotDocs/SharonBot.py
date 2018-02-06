@@ -20,6 +20,7 @@ async def on_message(message):
 
     #H E L L O
     if message.content.startswith(invoker + '!hello'):
+        #<:HelloPenguini:410292057622708235> is the penguin emote
         msg = '<:HelloPenguini:410292057622708235> \n ``「H E L L O」``'.format(message)
         await client.send_message(message.channel, msg)
 
