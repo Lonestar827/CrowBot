@@ -29,8 +29,8 @@ async def on_message(message):
         msg = 'WHAT DID YA SAY, SUCKA!? \n' + '<a:Gahn:395276099141238794><a:Frame:395276114064572426>'.format(message)
         await client.send_message(message.channel, msg)
 
-    #!haiku : be treated to a dandy haiku
-    if message.content.startswith(invoker + '!haiku'):
+    #!toTheStars : be treated to a dandy haiku
+    if message.content.startswith(invoker + '!toTheStars'):
         #generate the stanzas
             part1 = stanza1[randint(0,len(stanza1))]
             part2 = stanza2[randint(0,len(stanza2))]
@@ -98,7 +98,7 @@ async def on_message(message):
     #!help : Show help page
     if message.content.startswith(invoker + '!help'):
         await client.send_message(message.channel,
-        "```A bot designed for Haikus\nCommands available to everyone:\nTo The Stars!hello: H E L L O\nTo The Stars!haiku: be treated to a dandy haiku made from the txt files\nTo The Stars!submit: submit your own stanzas for review\nTo The Stars!help: shows the help page\nTo The Stars!credits: shows where credit is due\ncommands available to admins (Role Manegers)\nTo The Stars!view: allows you to look at the available stanzas and submissions\n```"
+        "```A bot designed for Haikus\nCommands available to everyone:\ndandyism!hello: H E L L O\ndandyism!toTheStars: be treated to a dandy haiku made from the txt files\ndandyism!submit: submit your own stanzas for review\ndandyism!help: shows the help page\ndandyism!credits: shows where credit is due\ncommands available to admins (Role Manegers)\ndandyism!view: allows you to look at the available stanzas and submissions\n```"
                                  )
 
     #!view : views available stanzas
