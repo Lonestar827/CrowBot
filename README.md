@@ -10,7 +10,7 @@ dandyism!hello:
 dandyism!bitchass:
   if ya want to insult the bot
   
-dandyism!haiku:
+dandyism!toTheStars:
   be treated to a dandy haiku made from the txt files
 
 dandyism!submit:
