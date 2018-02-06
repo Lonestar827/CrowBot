@@ -22,7 +22,13 @@ dandyism!help:
 dandyism!credits:
   shows where credit is due
   
-commands available to admins (Role Manegers)
+commands available to the bot owner
 
 dandyism!view:
-  allows you to look at the available stanzas and submitions
+  allows you to look at the available stanzas and submitions and edit the current txt files
+  
+dandyism!save:
+  writes the current arrays to the txt files
+
+dandyism!exit:
+	saves the current arrays to the txt files and logs out
