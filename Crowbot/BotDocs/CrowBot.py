@@ -11,9 +11,6 @@ invoker = 'caw'
 stanza1= [line.rstrip('\n') for line in open('FirstDandyStanzas.txt')]
 stanza2= [line.rstrip('\n') for line in open('SecondDandyStanzas.txt')]
 stanza3= [line.rstrip('\n') for line in open('ThirdDandyStanzas.txt')]
-submit1= open('FirstDandySubmitions.txt')
-submit2= open('SecondDandySubmitions.txt')
-submit3= open('ThirdDandySubmitions.txt')
 
 @client.event
 async def on_message(message):
@@ -44,6 +41,47 @@ async def on_message(message):
             msg = "```" + part1 + "\n" + part2 + "\n" + part3 + "```".format(message)
             await client.send_message(message.channel, msg)
 
+    #submit a stanza for the bot
+    if message.content.startswith(invoker + '!submit'):
+
+        #see which stanza they want
+        await client.send_message(message.channel,
+        "Please tell me which stanza you're submitting (1, 2, 3)")
+
+        msg = await client.wait_for_message(author=message.author)
+
+        #check for proper input
+        if(msg.content.startswith('1') or msg.content.startswith('2') or msg.content.startswith('3')):
+
+            #number variable for later
+            number = msg
+
+            #get stanza
+            await client.send_message(message.channel,
+            "Please tell me the content of the stanza")
+
+            msg = await client.wait_for_message(author=message.author)
+            
+
+            await client.send_message(message.channel, "Thanks for submitting your dandy stanza!")
+
+            #write to file
+            if(number.content == '1'):
+                with open('FirstDandySubmitions.txt', 'a') as the_file:
+                            the_file.write(msg.content + '\n')
+            if(number.content == '2'):
+                with open('SecondDandySubmitions.txt', 'a') as the_file:
+                            the_file.write(msg.content + '\n')
+            if (number.content == '3'):
+                with open('ThirdDandySubmitions.txt', 'a') as the_file:
+                            the_file.write(msg.content + '\n')
+
+            
+
+        else:
+            await client.send_message(message.channel,
+            "Thats not a valid entry, please try `!submitting` again")
+                                
         
 
     #logs_out
