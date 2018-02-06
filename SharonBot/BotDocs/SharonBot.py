@@ -94,7 +94,6 @@ async def on_message(message):
             "Thats not a valid entry, please try `!submitting` again"
                                      )
                                 
-
     #!help : Show help page
     if message.content.startswith(invoker + '!help'):
         await client.send_message(message.channel,
@@ -118,7 +117,6 @@ async def on_message(message):
         await client.send_message(message.channel,
         "```Credits:\nLonestar : creator and coder for the bot\nSangmillion: Provided the slayer soundfiles for transcription\nUbuyo: Helping with the transcription```"
                                  )
-
     
     #!exit : logs_out
     if message.content.startswith(invoker + '!exit'):
