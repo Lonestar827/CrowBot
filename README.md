@@ -1,4 +1,4 @@
-# CrowBot
+# Sharonbot
 
 A bot designed for Haikus
 
