@@ -1,0 +1,81 @@
+Haikubot:
+1000: objects
+2000: Collections
+3000: Functions
+
+	1000: Objects:
+		1001: Stanza:
+			content = string
+			position = int
+			author = string
+			server = string
+			active = boolean
+			id = int
+		
+		1002: command:
+			name = string
+			helpTxt = string
+			command(some_function):
+				some_function()
+				
+	
+	2000: Collections:
+		commandList(name:command)
+		StanzaList
+
+	3000: Functions:
+	## mean helpTxt for the function
+		
+		3001:
+		!haiku(message):
+			##Treats you to a dandy haiku
+			
+			list1 = from StanzaList, get stanzas where (active = true and pos = 1)
+			list2 = from StanzaList, get stanzas where (active = true and pos = 2)
+			list3 = from StanzaList, get stanzas where (active = true and pos = 3)
+			stanza1 = random stanza from list1
+			stanza2 = random stanza from list2
+			stanza3 = random stanza from list3
+			
+			haiku = stanza1 + "\n" + stanza2 + "\n" + stanza3
+			send_message(haiku, message.channel)
+		
+		3002:
+		!submit(message):
+			##submits a stanza for review
+			positon = string
+			content = string
+			
+			question = "please tell me the position of the stanza (1, 2, 3) or anything else to abort"
+			send_message(question, message.channel)
+			if reply = 1 or 2 or 3:
+				position = reply
+				
+				question = "please tell me the content of the stanza (type ``abort`` to abort submission)"
+				send_message(question, message.channel)
+				if reply != abort:
+					content = reply
+					
+					send_message("Thanks for submitting your stanza!", message.channel)
+					
+					newStanza = (content = newContent, position = newPositon, active = false, author = message.author.id,
+								server = message.server, ID = randomID())
+								
+					StanzaList.add(newStanza)
+				
+				else:
+					question = "aborting submission"
+					send_message(question, message.channel)
+				
+			else:
+				question = "aborting subbmition"
+			send_message(question, message.channel)
+			
+		3003:
+		randomID(StanzaList):
+			while(true):
+				newID = random 5 digit number
+				if newID not contained in StanzaList:
+					return newID
+		
+		
