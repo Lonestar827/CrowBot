@@ -136,4 +136,4 @@ async def on_ready():
     print('------')
     
 
-client.run('NDEwMzAxODkwNTUxODczNTM2.DVuTEw.KtQ4oTESGNUff06Z6CNAvXk09wA')
+client.run()
