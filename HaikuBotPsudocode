@@ -19,7 +19,7 @@ Haikubot:
 				some_function()
 		
 		1003: serverOptions:
-				
+			submitable = boolean
 	
 	2000: Collections:
 		
@@ -42,7 +42,7 @@ Haikubot:
 			a list of banned users
 		
 	2004 serverList:
-		serverList(ID:options)
+		serverList(ID:serverOptions)
 			A list of servers with their respective options
 	
 	2005 baseStanzas:
@@ -449,7 +449,10 @@ Haikubot:
 		3013 @onServerJoin:
 		
 		##adds another server to the serverList
-		serverList.add(serverID:[0])
+		
+		newOptions = serverOptions(submitable = true)
+		
+		serverList.add(serverID:newOptions)
 		
 		
 		3014 !options:
@@ -461,3 +464,18 @@ Haikubot:
 			##check for mod/botOwner
 			if message.author = mod or message.author = botOwner:
 				
+				command = true
+				options = serverList.key(message.server)
+				
+				while(command):
+					send_message("Users able to submit stanzas: " + options.submitable, message.channel)
+					
+					reply = stripped user message
+					
+					if reply[0] = toggle:
+						
+						if reply[1] = submit:
+							options.submitable = not options.submitable
+					
+					if reply[0[ = done:
+						send_message("Done with options", message.chanel)
