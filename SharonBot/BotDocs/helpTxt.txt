@@ -1,0 +1,6 @@
+hello|```HELLO:\\n say hello to the bot \\n Thats about it really```
+credits|```Credits: \n Gives credit where credit is due```
+haiku|```Haiku: treats you to a haiku \\n \\n Possible arguments: \\n all: takes stanzas from all servers (Warning: may lead to some weird lines) \\n nobase: gets rid of the base stanzas and only uses the custom stanzas```
+submit|```Submit: puts in a stanza created by YOU!
+view|```(Mods Only) View: allows you to view the custom stanzas submitted on the server by user, active, or position```
+options|```(Mods Only) Options: allows for the modification of the current options```

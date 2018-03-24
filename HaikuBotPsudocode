@@ -1,0 +1,481 @@
+Haikubot:
+1000: objects
+2000: Collections
+3000: Functions
+
+	1000: Objects:
+		1001: Stanza:
+			content = string
+			position = int
+			author = string
+			server = string
+			active = boolean
+			id = int
+		
+		1002: command:
+			name = string
+			helpTxt = string
+			command(some_function):
+				some_function()
+		
+		1003: serverOptions:
+			submitable = boolean
+	
+	2000: Collections:
+		
+	2001 commandList
+	2002 stanzaList
+	2003 botBanList
+	2004 serverList
+	2005 baseStanzas
+	
+	2001 commandList:
+		commandList(name:command)
+			using the name as the ID, i can bring up command objects
+		
+	2002 stanzaList:	
+		StanzaList(Stanza)
+			just a list of stanzas
+		
+	2003 botBanList:
+		botBanList(userIDs)
+			a list of banned users
+		
+	2004 serverList:
+		serverList(ID:serverOptions)
+			A list of servers with their respective options
+	
+	2005 baseStanzas:
+		the base stanzas that are used when retrieving haikus, gotten from the txt files
+
+	3000: Functions:
+	#!commands = commands called by users
+	#@commands = commands on events
+	300! @onMessage:
+	3001 !haiku
+	3002 !submit
+	3003 randomID
+	3004 !saveData
+	3005 loadData
+	3006 !view
+	3007 !help
+	3008 !botban
+	3009 !unBotBan
+	3010 !credits	
+	3011 !invite
+	3012 !serverList
+	3013 @onServerJoin
+	3014 !options
+		
+		300! @onMessage:
+			onMessage(message):
+				if message.user != self or botBanList.!contains(message.user.id):
+					if message_startswith(invoker):
+						command = message stripped of invoker but not args after
+						if command is in commandList:
+							stripped message = command stripped of command
+							commandList.key(command)(message, strippedMessage)
+						
+		
+		3001 !haiku:
+		!haiku(message, strippedMessage):
+			
+		##Treats you to a dandy haiku
+			
+			if(strippedMessage is "all"):
+				
+				##removes the server condition and gathers all possible stanzas
+				
+				list1 = from StanzaList, get stanzas where (active = true and pos = 1)
+				list2 = from StanzaList, get stanzas where (active = true and pos = 2)
+				list3 = from StanzaList, get stanzas where (active = true and pos = 3)
+				stanza1 = random stanza from list1
+				stanza2 = random stanza from list2
+				stanza3 = random stanza from list3
+				
+				##creates message and sends it to the channel
+				
+				haiku = stanza1 + "\n" + stanza2 + "\n" + stanza3
+				send_message(haiku, message.channel)
+			
+			else:
+				
+				##regular haiku
+				
+				##gathers stanzas based on the server
+				
+				list1 = from StanzaList, get stanzas where (active = true and pos = 1 and server = message.server)
+				list2 = from StanzaList, get stanzas where (active = true and pos = 2 and server = message.server)
+				list3 = from StanzaList, get stanzas where (active = true and pos = 3 and server = message.server)
+				stanza1 = random stanza from list1
+				stanza2 = random stanza from list2
+				stanza3 = random stanza from list3
+				
+				##creates message and sends it to the channel
+				
+				haiku = stanza1 + "\n" + stanza2 + "\n" + stanza3
+				send_message(haiku, message.channel)
+
+		
+		3002 !submit:
+		!submit(message, strippedMessage):
+			
+		##submits a stanza for review
+		
+			##check to see if it is a PM
+			
+			if message.server != none:
+
+				positon = string
+				content = string
+				
+				##get the position from the user
+				
+				question = "please tell me the position of the stanza (1, 2, 3) or anything else to abort"
+				send_message(question, message.channel)
+				
+				##if the reply is a number
+				
+				if reply = 1 or 2 or 3:
+					position = reply
+					
+					##get the content of the stanza
+					
+					question = "please tell me the content of the stanza (type ``abort`` to abort submission)"
+					send_message(question, message.channel)
+					
+					##if the reply is not abort
+					
+					if reply != abort:
+						
+						##add the stanza to the list
+						
+						content = reply
+						
+						send_message("Thanks for submitting your stanza!", message.channel)
+						
+						newStanza = (content = newContent, position = newPositon, active = false, author = message.author.id,server = message.server, ID = randomID(StanzaList))
+									
+						StanzaList.add(newStanza)
+					
+					else:
+					
+						##abort the submission
+					
+						question = "aborting submission"
+						send_message(question, message.channel)
+					
+				else:
+				
+					##abort the submission
+					
+					question = "aborting subbmition"
+					send_message(question, message.channel)
+			
+			else:
+				
+				##redirect user to a server
+				
+				send_message("please submit your stanza on a server', message.server)
+				
+		3003 RandomID:
+		randomID(StanzaList):
+			while(true):
+				newID = random 5 digit number
+				if newID not contained in StanzaList:
+					return newID
+		
+		3004 !saveData:
+		saveData(message, StanzaList):
+			if user == botOwner:
+				file = open file in(Place)
+				if file is filled in some way:
+				clear out file
+				for each stanza in StanzaList:
+					if stanza.active = true:
+						newActive = 1
+					else:
+						newActive = 0
+						
+					file.writeLine(stanza.id + "|" + stanza.position + "|" + stanza.content + "|" + stanza.author + "|" stanza.server + "|" +newActive)
+		
+		3005 loadData:
+		loadData(file):
+			counter = 0
+			##0 = id
+			##1 = position
+			##2 = content
+			##3 = author
+			##4 = server
+			##5 = active
+			
+			input = string
+			newStanza = stanza
+			StanzaList = new StanzaList
+			
+			for each line in the file:
+				
+				for i = 0, i < line.length, i++:
+					if charAt(i) != "|":
+						input.append(charAt(i))
+					else:
+						if counter = 0:
+							stanza.id = input
+							clear input
+							counter++
+						
+						if counter = 1:
+							stanza.position = input
+							clear input
+							counter++
+						
+						if counter = 2:
+							stanza.content = input
+							clear input
+							counter++
+						
+						if counter = 3:
+							stanza.author = input
+							clear input
+							counter++
+							
+						if counter = 4:
+							stanza.server = input
+							clear input
+							counter++
+							
+						if counter = 5:
+							if input = 1:
+								input = True
+							else:
+								input = False
+							
+							stanza.active = input
+							clear input
+							counter++
+			
+			StanzaList.add(newStanza)
+		return StanzaList
+		
+		3006 !view:
+			
+		##gives the list of custom stanzas in the database
+			
+			view(message, strippedMessage):
+				
+				adminMode = false
+				
+				##if strippedMessage contains ~a and the bot owner is using the command
+				
+				if strippedMessage = ~a and mesage.owner = botOwner:
+					
+					##turn on admin mode
+					
+					adminMode = true
+				
+				##if the person using the command is a moderator or adminMode is on and its on a server
+				
+				if (message.owner is moderator or adminmode = true) and (message.server != none):
+					
+					##get every custom stanza on the server
+					
+					editList = every stanza in StanzaList that contains the serverID
+					
+					##set up conditions array
+					
+					conditions = [position, active, userID]
+					
+					posCondition = none
+					actCondition = none
+					userCondition = none
+					
+					while(command = true):
+						send_message("Conditions for search:\n Position = " + posCondition + "\nActive = " + actCondition + \nUser = " + userCondition + "\nPlease set the conditions for search (Type ``condition argument``), ``abort`` to abort the search, or ``begin`` to start the search", message.channel)
+						
+						reply = stripped reply message
+						if reply[0].lower = position & reply[1] = 1, 2 or 3:
+							posCondition = reply[1]
+						if reply[0].lower = active & reply[1].lower = true or false:
+							actCondition = reply[1]
+						if reply[0].lower = user and (reply[1].length = userID length or reply[1] = mention)
+							userCondition = userID
+						if reply[0].lower = abort:
+							command = false
+							send_message("aborting search", message.channel)
+						if reply[0].lower = begin:
+							command = false
+							conditions = [posCondition, actCondition, userCondition]
+							displayList(message, conditions, editList)
+
+		3006-a displayEditList
+			displayList(message, conditions, editList):
+				
+				##filter out the edit list
+				
+				##if the position condition is not empty
+				if conditions[0] != none:
+					
+					##filter out the stanzas without that position
+					for each stanza in StanzaList:
+						if stanza.position != conditions[0]:
+							editList.remove(stanza)
+				
+				##if the active condition is not empty
+				if conditions[1] != none:
+					
+					##filter out the stanzas that dont fit the condition
+					for each stanza in StanzaList:
+						if stanza.active != conditions[1]:
+							editList.remove(stanza)
+				
+				#if the userID condition is not empty
+				if conditions[2] != none:
+				
+					##filter out the stanzas without the userID
+					for each stanza in StanzaList:
+						if stanza.user != conditions[2]:
+							editList.remove(stanza)
+				
+				command = true
+				
+				while (command)
+				for the length of editList represented by i:
+					send_message(i + ".( " + editList[i].position + " " + editList[i].content + " " + editList[i].user + ")" , message.channel)
+					
+					send_message("Please choose the stanza you want to edit or delete", message.server)
+					reply = stripped reply message
+					
+					if reply[0].lower = delete and (reply[1] >= 1 and reply[1] <= editList.length):
+					
+						selectedStanza = editList[reply[1]]
+						
+						##ask if they're sure
+						send_message("are you sure you want to delete that stanza?", message.server)
+						reply = stripped reply message
+						if reply[0].lower = y:
+							stanzaList.remove(editList[selectedStanza].id)
+							editList.remove(selectedStanza.id)
+						else:
+							send_message("Aborting deletion", message.server)
+						
+					if reply[0].lower = toggle and (reply[1] >= 1 and reply[1] <= editList.length):
+						selectedStanza = editList[reply[1]]
+						editList[selectedStanza].active = !editList[selectedStanza].active
+						stanzaList(selectedStanza.id) = !stanzaList(selectedStanza.id)
+						
+					if reply[0].lower = done:
+						send_message("Done with editing", message.channel)
+						command = false
+				
+		3007 !help:
+			
+			##provides the helptext for each command
+			
+			help(message, strippedMessage):
+				if strippedMessage is in commandList:
+					reply = commandList.key(strippedMessage).help
+					send_message(reply, message.channel)
+		
+		3008 !botban:
+			
+		##adds someone to the botban list
+			
+			botban(message, strippedMessage):
+				
+				##check for bot owner
+				
+				if message.author = botOwner
+					
+					##add user to banList
+					
+					if strippedMessage = userID:
+						botBanList.add(strippedMessage)
+						send_message(userID.name + " has been botbanned")
+					if strippedMessage = mention:
+						botBanList.add(mention.userID.name + " has been botbanned")
+		
+		3009 !unBotBan:
+			
+		##removes someone from the botban list
+			
+			unBotBan(message, strippedMessage):
+				
+				##check for bot owner
+				
+				if message.owner = botOwner
+				
+					##remove user from banList
+				
+					if strippedMessage = userID:
+						botBanList.remove(strippedMessage)
+						send_message(userID.name + " has been unBotbanned", message.channel)
+					if strippedMessage = mention:
+						botBanList.remove(mention.userID)
+						send_message(userID.name + " has been unBotbanned", message.channel)
+		
+		3010 !credits:
+			
+		##gives credit where credit is due
+			
+			credits(message, strippedMessage):
+				
+				send_message(```Credits:\nLonestar : creator and coder for the bot\nSangmillion: Provided the slayer soundfiles for transcription\nUbuyo: Helping with the transcription\nFraw and Squaswin: for helping my dumbass out with the finer thing of coding for python discord bots```, message.channel)
+
+		3011 !invite:
+		
+		##gives invite link
+		
+		invite(message, strippedMessage):
+			send_message(botLink, message.server)
+		
+		3012 !serverList:
+		
+		##displays the servers the bot is on
+		
+		!serverList(message, strippedMessage):
+			
+			##check for bot owner
+			
+			if message.author = botOwner:
+				
+				reply = "servers the bot is in: "
+				
+				##going through serverList, use the ID to get the name of every server
+				
+				for each serverID in sererList:
+					reply.append(discord.client.get_guild(serverID)
+				
+		
+		3013 @onServerJoin:
+		
+		##adds another server to the serverList
+		
+		newOptions = serverOptions(submitable = true)
+		
+		serverList.add(serverID:newOptions)
+		
+		
+		3014 !options:
+		
+		##allows for toggling of options
+		
+		options(message, strippedMessage):
+			
+			##check for mod/botOwner
+			if message.author = mod or message.author = botOwner:
+				
+				command = true
+				options = serverList.key(message.server)
+				
+				while(command):
+					send_message("Users able to submit stanzas: " + options.submitable, message.channel)
+					
+					reply = stripped user message
+					
+					if reply[0] = toggle:
+						
+						if reply[1] = submit:
+							options.submitable = not options.submitable
+					
+					if reply[0[ = done:
+						send_message("Done with options", message.chanel)
