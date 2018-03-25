@@ -65,7 +65,7 @@ async def on_server_join(server):
 @client.event
 async def on_message(message):
     #if the message is not the bot, starts with the invoker, and is not a PM
-    if (message.author != client.user) and (message.content.startswith(invoker + "!")) and (message.server != None):
+    if (message.author != client.user) and (message.content.startswith(invoker + "!")) and (message.server != None) and not message.author.bot:
         
         #split the input up                               
         strippedMessage = shlex.split(message.content.lower())
@@ -155,11 +155,14 @@ async def haiku(client, message, strippedMessage):
     #get the parts
     if len(customStanza1) != 0 and len(customStanza2) != 0 and len(customStanza3) != 0:    
         part1 = customStanza1[randint(0,len(customStanza1)-1)]
+        if " " not in part1:
+            part1 = "\n"+part1
         part2 = customStanza2[randint(0,len(customStanza2)-1)]
         part3 = customStanza3[randint(0,len(customStanza3)-1)]
 
         #put together the messege
-        msg = "```" + part1 + "\n" + part2 + "\n" + part3 + "```".format(message)
+        msg = "\n ```" + part1 + "\n" + part2 + "\n" + part3 + "```"
+
         await client.send_message(message.channel, msg)
     
     #not enough parts
@@ -170,7 +173,7 @@ async def haiku(client, message, strippedMessage):
 #displays the helptext for each command
 async def helpTxt(client, message, strippedMessage):
 
-    helpList = "```Available commands: \n hello, credits, haiku, submit \n Mod commands: \n View, options```"
+    helpList = "```Available commands: \n hello, credits, haiku, submit, view \n Mod commands: \n Options```"
     #If stripped message contains a command on the list...
     if (len(strippedMessage) != 0):
         
@@ -422,13 +425,13 @@ async def view(client, message, strippedMessage):
     if len(strippedMessage) != 0:
         
         #if ~a was used and the author of the message was the bot owner
-        if (strippedMessage[0] == "~a") and (str(message.author.id) == botOwner):
+        if (strippedMessage[0] == "~a") and ((str(message.author.id) == botOwner) or (message.author.server_permissions.ban_members)):
             
             #enable admin mode
             adminMode = True
 
     #if the author is a mod or admin mode was enabled
-    if(message.author.server_permissions.ban_members) or adminMode:
+    if adminMode:
         command = True
 
         #while the menu is still being used:
@@ -495,10 +498,12 @@ async def view(client, message, strippedMessage):
                     
                     #and the second part is not clear
                     if reply[1].lower() != "clear":
-                        
-                        #extract the user id from the mention
-                        userCondition = re.search("<@!?([0-9]{17,18})>", reply[1])
-                        userCondition = userCondition.group(1)
+                        if "<@" in reply[1]:
+                            #extract the user id from the mention
+                            userCondition = re.search("<@!?([0-9]{17,18})>", reply[1])
+                            userCondition = userCondition.group(1)
+                        else:
+                            userCondition = reply[1]
                     
                     #if the reply is clear
                     else:
@@ -526,7 +531,9 @@ async def view(client, message, strippedMessage):
                 #stop the loop and notify the user
                 command = False
                 await client.send_message(message.channel, "Timed out, aboring search")
-
+        
+    else:
+        await viewEditList(client, message, str(message.author.id),"","", editList)
 #second part of the view command               
 async def viewEditList(client, message, userCondition, activeCondition, positionCondition, editList):
     
@@ -581,12 +588,17 @@ async def viewEditList(client, message, userCondition, activeCondition, position
             #add the stanzas to the chart that will be sent to the user
             chart += "``position|content|user|active``\n"
             for x in editList:
-                chart += str(str(index) + ".) " + str(x.position) + " | " + str(x.content) + " | " + str(x.author) + " | " + str(x.active) + "\n")
+                userName = message.server.get_member(x.author)
+                if userName != None:
+                    userName = userName.name
+                else:
+                    userName = "No Author"
+                chart += str(str(index) + ".) " + str(x.position) + " | " + str(x.content) + " | " + userName + " | " + str(x.active) + "\n")
                 index += 1
             
             ##send the chart as well as instructions
             await client.send_message(message.channel, chart)
-            await client.send_message(message.channel, "Please choose the stanza you want to edit or delete (command, index):\n ``delete``, ``toggle``, ``done``")
+            await client.send_message(message.channel, "Please choose the stanza you want to edit or delete (command, index):\n ``edit`` , ``delete``, ``toggle``, ``done``")
             
             #wait for a message from the user that starts with done, toggle, or delete
             ret = await client.wait_for_message(
@@ -594,7 +606,7 @@ async def viewEditList(client, message, userCondition, activeCondition, position
                 check=lambda m: (
                 m.author == message.author and 
                 m.channel == message.channel and
-                (m.content.startswith("done") or m.content.startswith("toggle") or m.content.startswith("delete"))
+                (m.content.startswith("done") or m.content.startswith("toggle") or m.content.startswith("delete")or m.content.startswith("edit"))
                 )
                 )
             
@@ -642,6 +654,29 @@ async def viewEditList(client, message, userCondition, activeCondition, position
                             #and remove it from both lists
                             stanzaList.remove(stanza)
                             editList.remove(stanza)
+                        
+                        #if the first part is edit
+                        if reply[0] == "edit":
+                            
+                            #get the stanza
+                            stanza = editList[selected]
+                            
+                            await client.send_message(message.channel, "Please tell me what you want to edit it to")
+                            
+                            ret = await client.wait_for_message(
+                                    timeout=60,
+                                    check=lambda m: (
+                                    m.author == message.author and 
+                                    m.channel == message.channel
+                                    )
+                                    )
+                                    
+                            if ret != None:
+                                newContent = ret.content
+                                
+                                for x in editList:
+                                    if x.SID == stanza.SID:
+                                        x.content = newContent
                 
                 #if the first part is done
                 if reply[0] == "done":
@@ -749,7 +784,7 @@ async def optionView(client, message, strippedMessage):
                     #timeout message
                     else:
                         command = False
-                        await client.send_message(message.channel, "Timed out, aboring options")
+                        await client.send_message(message.channel, "Timed out, aborting options")
                         break
 
 #close down the bot
